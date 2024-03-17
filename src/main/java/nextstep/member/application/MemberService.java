@@ -6,7 +6,7 @@ import nextstep.auth.application.dto.GithubProfileResponse;
 import nextstep.exception.BadRequestException;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
-import nextstep.member.domain.LoginMember;
+import nextstep.auth.application.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -45,11 +45,11 @@ public class MemberService implements UserDetailsService{
     }
 
     @Override
-    public LoginMember findMemberByEmail(String email) {
+    public UserDetails findMemberByEmail(String email) {
         Member member = memberRepository.findByEmail(email).orElseThrow(
                 () -> new BadRequestException("존재하지 않는 회원입니다."));
 
-        return new LoginMember(member);
+        return new LoginMember(member.getEmail(), member.getPassword());
     }
 
     @Override
@@ -60,11 +60,6 @@ public class MemberService implements UserDetailsService{
             member = memberRepository.save(new Member(githubProfileResponse.getEmail(), "", githubProfileResponse.getAge()));
         }
 
-        return new LoginMember(member);
-    }
-
-    @Override
-    public UserDetails loginMember(String email) {
-        return new LoginMember(email);
+        return new LoginMember(member.getEmail(), member.getPassword());
     }
 }

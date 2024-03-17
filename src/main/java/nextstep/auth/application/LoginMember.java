@@ -1,6 +1,4 @@
-package nextstep.member.domain;
-
-import nextstep.auth.application.UserDetails;
+package nextstep.auth.application;
 
 import java.util.Objects;
 
@@ -12,9 +10,9 @@ public class LoginMember implements UserDetails {
         this.email = email;
     }
 
-    public LoginMember(Member member) {
-        this.email = member.getEmail();
-        this.password = member.getPassword();
+    public LoginMember(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     @Override

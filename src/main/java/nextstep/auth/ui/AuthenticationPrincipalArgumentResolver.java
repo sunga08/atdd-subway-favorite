@@ -1,6 +1,6 @@
 package nextstep.auth.ui;
 
-import nextstep.auth.application.UserDetailsService;
+import nextstep.auth.application.LoginMember;
 import nextstep.auth.AuthenticationException;
 import nextstep.auth.application.JwtTokenProvider;
 import org.springframework.core.MethodParameter;
@@ -11,11 +11,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private JwtTokenProvider jwtTokenProvider;
-    private UserDetailsService userDetailService;
 
-    public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailService) {
+    public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.userDetailService = userDetailService;
     }
 
     @Override
@@ -37,7 +35,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
         String email = jwtTokenProvider.getPrincipal(token);
 
-        return userDetailService.loginMember(email);
+        return new LoginMember(email);
     }
 
     private String splitAuthorization(String authorization) {
